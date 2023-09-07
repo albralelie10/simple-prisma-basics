@@ -1,0 +1,20 @@
+1# instalar dependencias : npm i prisma ts-node  @types/node nodemon
+2# configurar prisma file: npx prisma init --datasource-provider <name_db> 
+3# config archivo .env (solo agregra user y pass de tu dbsm  y una database existente DENTRO DEL GESTOR)
+3# OPCIONAL- TYPESCRIT: agregar configuracion de prisma a tsconfig: {
+    "compilerOptions":{
+        "sourceMap":true,
+        "outDir": "dist",
+        "strict": true,
+        "lib":["esnext"],
+        "esModuleInterop":true
+    }
+}
+
+4# definir UN esquema O MODELO EN schema.prisma 
+5# Realizar una migracion: npx prisma migrate dev --name init
+6# Intalar cliente : npm i @prisma/client 
+7# Generar Cliente : npx prisma generate 
+8# Genear archivo script.ts e importa el ccliente,
+9# Agregar un script de inicio en package.json:   "devStart":"nodemon script.ts",
+10# Ejecutar script y empezar mapnipular la base de datos

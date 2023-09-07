@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  // id Int @id @default(autoincrement()) 
+  id String @id @default(uuid()) //anotaciones de campo
+  name String 
+  email String @unique
+  age Int
+  role Role @default(BASIC)//ENUMERIACION 
+  // isAdmin Boolean @default(false)
+
+  posts Post[]//relacion 1:M con la tabla post
+
+  // blocl Bytes//Tipo Bytes
+
+  //Anotaciones de bloque // APLICAR CONFIGURACIONES Y/O RESTRICCIONES A UN CONJUNTO DE CAMPOS EN UN MODEL
+  // @@unique([name,age])
+
+  userConfiguration UserConfiguration? @relation(fields:[userConfigurationId],references:[id])  //RELACION 1:1 con la tabla USER CONFIGURATION
+  userConfigurationId String? @unique
+
+}
+
+model UserConfiguration{
+  id String @default(uuid()) @unique
+  emailUpdates Boolean 
+
+  user User? //RELACION 1:1 CON LA TABLA 'USER'
+
+}
+
+model Post{
+  id String @id @default(uuid())
+  title String
+  averageRating Float 
+  createedAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt //Actualizacion automatica de un campo al ser modificado
+  author User? @relation(fields: [authorId],references: [id]) //anotacion de relacion M:1
+  authorId String? //modificador de campo OPCIONAL ? // Aqui definimos que la relacion es parcial
+
+  category Category[]// Relacion M:M
+
+  // @@id([title,authorId])//como crear una clave compuesta 
+}
+
+model Category{
+  id String @id @default(uuid())
+  category_name String @unique 
+  post Post[] // Relacion M:M
+  
+  // creacion de un indice
+ @@index([category_name])
+}
+
+enum Role{//ENUMERACION 
+  BASIC
+  ADMIN
+}
